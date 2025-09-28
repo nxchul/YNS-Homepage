@@ -5,16 +5,15 @@
 ## 1. 제품 개요
 
 ### 1.1 제품명
-**YNS 통합 플랫폼** - TSMC Design House를 위한 AI 기반 종합 서비스 플랫폼
+**YNS 통합 플랫폼** - ASIC Design House를 위한 AI 기반 종합 서비스 플랫폼
 
 ### 1.2 제품 비전
 반도체 설계 및 제조 서비스 분야의 디지털 혁신을 통해 고객 경험을 극대화하고, AI 기반 자동화로 업무 효율성을 향상시키는 원스톱 플랫폼 구축
 
 ### 1.3 제품 목표
-- TSMC Design House 서비스의 디지털화 및 자동화
+- ASIC Design House 서비스의 디지털화 및 자동화
 - AI 채팅봇을 통한 24/7 고객 지원 서비스 제공
 - MPW(Multi-Project Wafer) 프로세스의 효율적 관리
-- 암호화폐 투자 도구 및 금융 계산기 서비스 확장
 
 ## 2. 타겟 사용자
 
@@ -47,9 +46,18 @@
 ### 3.2 MPW 서비스 관리 (Priority: High)
 **기능 설명**: Multi-Project Wafer 전체 라이프사이클 관리
 - **Shuttle 일정 관리**: PDF 스케줄 업로드 및 자동 파싱
+    pdf schedule을 parsing해서 웹으로 일정 표시
+    일정에 대한 고객의 mpw요청 가능
 - **GDS 파일 관리**: 업로드, 검증, XOR 기능
+     gds업로드는 서버에 자동저장 (서버에서 자동저장되면 data prepartion작업 진행및 검증
+      검증 결과 리포드 --> 담당자 확인 승인 후 --> 고객에게 데이터이상 여부 확인해 줌)
 - **TO(Tape-Out) 관리**: Dry GDS 요청 및 승인 프로세스
+      TO-10day: Dry GDS요청 메일 혹은 SNS noticce전송.
+      TO-2day: Final GDS요청 메일 혹은 SNS notice 전송.
 - **마스크 정보 관리**: 마스크 수, 레이어 정보 추적
+     MT form tempate parsing(import)후 웹 view하게 만듬.
+     data parsing/logging과 비교하여 표시
+     관리자 확인 후, MT form export
 
 **기술 요구사항**:
 - PDF 파싱 라이브러리 (pdf-parse)
@@ -70,22 +78,9 @@
 - 워크플로우 엔진
 - 문서 템플릿 관리
 
-### 3.4 암호화폐 계산기 (Priority: Medium)
-**기능 설명**: 투자 분석 및 평단가 계산 도구
-- 평단가 하향 계산기
-- 포트폴리오 분석
-- 수익률 시뮬레이션
-- 실시간 가격 데이터 연동
-
-**기술 요구사항**:
-- 암호화폐 API 연동
-- 복잡한 수학 계산 라이브러리
-- 차트 시각화 (Chart.js)
-- 데이터 캐싱 시스템
-
 ### 3.5 사용자 인증 및 권한 관리 (Priority: High)
 **기능 설명**: Supabase 기반 인증 시스템
-- 로그인/회원가입
+- 로그인/회원가입 (이메일,소속, 모바일번호 요청)
 - 역할 기반 접근 제어 (RBAC)
 - 관리자 패널
 - 감사 로그
@@ -109,7 +104,6 @@ yns-web/ (Next.js App)
 ├── 메인 애플리케이션
 ├── AI 채팅 인터페이스
 ├── MPW 관리 시스템
-├── 암호화폐 계산기
 └── 관리자 패널
 ```
 
@@ -151,9 +145,6 @@ chat_messages (id, session_id, role, content, timestamp)
 -- PDK/DK 요청
 pdk_requests (id, user_id, pdk_type, status, nda_signed, approved_at)
 
--- 암호화폐 계산
-crypto_portfolios (id, user_id, name, created_at)
-crypto_transactions (id, portfolio_id, symbol, amount, price, type, date)
 ```
 
 ## 5. 사용자 경험 (UX) 요구사항
@@ -208,12 +199,6 @@ crypto_transactions (id, portfolio_id, symbol, amount, price, type, date)
 - [ ] PDK/DK 요청 워크플로우
 - [ ] 이메일 알림 시스템
 - [ ] 관리자 패널
-
-### 7.3 Phase 3 (고도화) - 2개월
-- [ ] 암호화폐 계산기 통합
-- [ ] 고급 분석 도구
-- [ ] 모바일 앱 개발
-- [ ] API 문서화 및 SDK 제공
 
 ## 8. 성공 지표 (KPI)
 
@@ -275,7 +260,6 @@ workspace/
 │   ├── src/components/  # 공통 컴포넌트
 │   ├── src/lib/         # 유틸리티 및 설정
 │   └── scripts/         # 빌드 및 배포 스크립트
-├── golf_putting_*       # 골프 관련 분석 도구
 └── README.md           # 프로젝트 문서
 ```
 
